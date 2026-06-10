@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bảng Quản Trị Reseller - Muacert & Pay2S</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // Immediate Secure Page Guard
+    {
+      const token = localStorage.getItem('reseller_admin_token');
+      if (!token) {
+        window.location.href = 'login.html';
+      }
+    }
+  </script>
+</head>
+
+<body>
+
+  <div class="app-container">
+
+    <!-- Sidebar Left -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon" style="background: linear-gradient(135deg, var(--warning) 0%, var(--danger) 100%);">A
+        </div>
+        <span class="brand-name"
+          style="background: linear-gradient(to right, white, var(--text-muted)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Admin
+          Reseller</span>
+      </div>
+
+      <ul class="nav-menu">
+        <li class="nav-item active" data-tab="stats">
+          <button>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 3v18h18"></path>
+              <path d="M18 9l-5 5-4-4-4 4"></path>
+            </svg>
+            Thống kê Doanh thu
+          </button>
+        </li>
+        <li class="nav-item" data-tab="dashboard">
+          <button>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="9"></rect>
+              <rect x="14" y="3" width="7" height="5"></rect>
+              <rect x="14" y="12" width="7" height="9"></rect>
+              <rect x="3" y="16" width="7" height="5"></rect>
+            </svg>
+            Quản lý thiết bị
+          </button>
+        </li>
+        <li class="nav-item" data-tab="users-config">
+          <button>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            Quản lý Thành viên
+          </button>
+        </li>
+        <li class="nav-item" data-tab="price-config">
+          <button>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+            Set giá bán kiếm lời
+          </button>
+        </li>
+
+        <li class="nav-item" data-tab="system-config">
+          <button>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path
+                d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42">
+              </path>
+            </svg>
+            Kết nối API & TK
+          </button>
+        </li>
+
+        <li class="nav-item" data-tab="backup-config">
+          <button>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            Sao lưu & Khôi phục
+          </button>
+        </li>
+
+        <li class="nav-item" data-tab="logs-config">
+          <button>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            Nhật ký Hệ thống
+          </button>
+        </li>
+
+
+      </ul>
+
+      <div class="sidebar-footer" style="display: flex; flex-direction: column; gap: 10px;">
+        <button class="btn btn-secondary" id="logout-btn"
+          style="width: 100%; font-size: 0.85rem; padding: 10px; display: flex; justify-content: center; gap: 8px; color: var(--danger); border-color: rgba(239, 68, 68, 0.1);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          Đăng xuất Admin
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Right -->
+    <main class="main-content">
+
+      <header>
+        <div class="page-title">
+          <h1 id="view-title">Quản lý Thiết bị</h1>
+          <p id="view-desc">Quản lý danh sách thiết bị khách hàng liên kết cert và thực hiện check trạng thái unban.</p>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <button id="mobile-logout-btn" class="reseller-login-badge"
+            style="background: rgba(239, 68, 68, 0.05); color: #f87171; border-color: rgba(239, 68, 68, 0.15); cursor: pointer; border: 1px solid; outline: none;">
+            🚪 Thoát
+          </button>
+        </div>
+      </header>
+
+      <!-- View Containers -->
+      <div class="tab-content-container">
+
+        <!-- ======================================= -->
+        <!-- TAB 0: STATS VIEW (THỐNG KÊ) -->
+        <!-- ======================================= -->
+        <div id="tab-stats" class="tab-view active">
+          <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
+            <div class="glass-card stat-card">
+              <div class="stat-header">
+                <span>Tổng Doanh Thu Nạp</span>
+              </div>
+              <div class="stat-value" id="stat-total-revenue" style="color: var(--success);">0đ</div>
+            </div>
+            <div class="glass-card stat-card">
+              <div class="stat-header">
+                <span>Tổng Thiết Bị</span>
+              </div>
+              <div class="stat-value" id="stat-total-devices" style="color: var(--primary);">0</div>
+            </div>
+            <div class="glass-card stat-card">
+              <div class="stat-header">
+                <span>Tổng Thành Viên</span>
+              </div>
+              <div class="stat-value" id="stat-total-users" style="color: var(--warning);">0</div>
+            </div>
+          </div>
+
+          <div class="glass-card" style="margin-top: 1.5rem;">
+            <h3 style="margin-bottom: 1rem; font-weight: 600;">Biểu đồ Doanh thu 30 ngày gần nhất</h3>
+            <div style="height: 400px; width: 100%;">
+              <canvas id="revenueChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- ======================================= -->
+        <!-- TAB 1: DASHBOARD VIEW (MANAGE DEVICES) -->
+        <!-- ======================================= -->
+        <div id="tab-dashboard" class="tab-view">
+          <!-- Stats Grid -->
+          <div class="stats-grid">
+            <div class="glass-card stat-card">
+              <div class="stat-header">
+                <span>Khách hàng Đã đăng ký</span>
+                <div class="stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                  </svg></div>
+              </div>
+              <div class="stat-value" id="stat-devices-count">0</div>
+              <div class="stat-footer">
+                <span class="stat-change-up">✓ Hoạt động trên Muacert.com</span>
+              </div>
+            </div>
+
+            <div class="glass-card stat-card">
+              <div class="stat-header">
+                <span>Cơ chế giá đại lý</span>
+                <div class="stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+                  </svg></div>
+              </div>
+              <div class="stat-value" style="font-size: 1.3rem; padding: 10px 0;">Có Lãi (Markup Active)</div>
+              <div class="stat-footer">
+                <span class="stat-change-up">✓ VietQR tự ăn chênh lệch</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Devices List -->
+          <div class="glass-card" style="margin-bottom: 1.5rem;">
+            <h3
+              style="margin-bottom: 1.25rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
+              <span>Thiết bị Khách hàng (Muacert Proxy)</span>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                <input type="text" id="search-device-udid-input" class="form-input" placeholder="Tìm theo UDID..." style="width: 200px; height: 32px; font-size: 0.8rem;">
+                <button class="btn btn-secondary" id="search-device-udid-btn" style="padding: 6px 12px; font-size: 0.8rem;">Tìm</button>
+                <button class="btn btn-secondary" id="sync-devices-btn"
+                  style="padding: 6px 12px; font-size: 0.8rem; background: rgba(16, 185, 129, 0.1); color: #10B981; border-color: rgba(16, 185, 129, 0.3);">Đồng bộ từ Muacert</button>
+                <button class="btn btn-secondary" id="refresh-devices-btn"
+                  style="padding: 6px 12px; font-size: 0.8rem;">Làm mới</button>
+                <button class="btn btn-primary" id="open-direct-register-btn"
+                  style="padding: 6px 12px; font-size: 0.8rem;">Đăng ký hộ</button>
+              </div>
+            </h3>
+
+            <div class="data-table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Tên Thiết bị</th>
+                    <th>Mã UDID iOS</th>
+                    <th>Mã ID Muacert</th>
+                    <th>Gói dịch vụ</th>
+                    <th>Ngày thêm</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody id="devices-list-tbody">
+                  <tr>
+                    <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">Đang tải danh
+                      sách thiết bị từ API tổng...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Device Pagination Controls -->
+            <div id="devices-pagination" style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 1rem;">
+              <button class="btn btn-secondary" id="btn-devices-prev" style="padding: 6px 12px; font-size: 0.8rem;" disabled>Trang trước</button>
+              <span id="devices-page-info" style="font-size: 0.9rem; color: var(--text-muted);">Trang 1 / 1</span>
+              <button class="btn btn-secondary" id="btn-devices-next" style="padding: 6px 12px; font-size: 0.8rem;" disabled>Trang sau</button>
+            </div>
+          </div>
+
+          <!-- Direct Register Form Panel (Hidden by default modal) -->
+          <div class="glass-card" id="direct-register-panel"
+            style="display: none; border-color: var(--primary); margin-top: 1.5rem;">
+            <h3
+              style="margin-bottom: 1rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
+              <span>Thêm thiết bị hộ khách hàng (Direct Admin Register)</span>
+              <button class="btn btn-secondary"
+                onclick="document.getElementById('direct-register-panel').style.display='none'"
+                style="padding: 4px 8px; font-size: 0.75rem;">Đóng</button>
+            </h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">Công cụ này cho phép Đại lý
+              đăng ký nhanh thiết bị trực tiếp qua Muacert bằng token admin (Bỏ qua khâu cổng thanh toán VietQR dành cho
+              các giao dịch đặc biệt).</p>
+
+            <form id="direct-register-form">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="form-group">
+                  <label for="reg-udid">UDID Thiết bị</label>
+                  <input type="text" id="reg-udid" class="form-input" placeholder="Nhập mã UDID 40 ký tự..." required>
+                </div>
+                <div class="form-group">
+                  <label for="reg-name">Tên hiển thị</label>
+                  <input type="text" id="reg-name" class="form-input" placeholder="iPhone của khách hàng..." required>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 15px;">
+                <div class="form-group">
+                  <label for="reg-model">Loại thiết bị</label>
+                  <select id="reg-model" class="form-input" style="height: 45px;">
+                    <option value="iPhone">iPhone</option>
+                    <option value="iPad">iPad</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="reg-package">Gói chứng chỉ</label>
+                  <select id="reg-package" class="form-input" style="height: 45px;">
+                    <option value="3">Gói Cơ Bản (Base 50k)</option>
+                    <option value="2">Gói Tiêu Chuẩn (Base 100k)</option>
+                    <option value="1">Gói Cao Cấp (Base 150k)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="reg-nickname">Biệt danh đại lý</label>
+                  <input type="text" id="reg-nickname" class="form-input" placeholder="client-custom">
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Thêm trực tiếp lên
+                Muacert</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- ======================================= -->
+        <!-- TAB: USERS MANAGEMENT VIEW -->
+        <!-- ======================================= -->
+        <div id="tab-users-config" class="tab-view">
+          <div class="glass-card" style="margin-bottom: 1.5rem;">
+            <h3 style="margin-bottom: 1.25rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
+              <span>Quản lý Thành viên</span>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button class="btn btn-secondary" id="btn-cleanup-inactive" style="padding: 6px 12px; font-size: 0.8rem; color: var(--danger); border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.08);">Xóa tài khoản rác</button>
+                <input type="text" id="search-username-input" class="form-input" placeholder="Tìm theo tên đăng nhập..." style="width: 180px; height: 32px; font-size: 0.8rem;">
+                <input type="text" id="search-udid-input" class="form-input" placeholder="Tìm theo UDID..." style="width: 180px; height: 32px; font-size: 0.8rem;">
+                <button class="btn btn-secondary" id="search-udid-btn" style="padding: 6px 12px; font-size: 0.8rem;">Tìm kiếm</button>
+                <button class="btn btn-primary" id="refresh-users-btn" style="padding: 6px 12px; font-size: 0.8rem;">Làm mới</button>
+              </div>
+            </h3>
+
+            <div class="data-table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Tên đăng nhập</th>
+                    <th>Số dư</th>
+                    <th>Tổng nạp</th>
+                    <th>Thiết bị</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody id="users-list-tbody">
+                  <tr>
+                    <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">Đang tải danh sách thành viên...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <!-- Pagination Controls -->
+            <div id="users-pagination" style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 1rem;">
+              <button class="btn btn-secondary" id="btn-prev-page" style="padding: 6px 12px; font-size: 0.8rem;" disabled>Trang trước</button>
+              <span id="users-page-info" style="font-size: 0.9rem; color: var(--text-muted);">Trang 1 / 1</span>
+              <button class="btn btn-secondary" id="btn-next-page" style="padding: 6px 12px; font-size: 0.8rem;" disabled>Trang sau</button>
+            </div>
+          </div>
+
+          <!-- User Details Panel (Hidden by default) -->
+          <div class="glass-card" id="user-details-panel" style="display: none; border-color: var(--primary); margin-top: 1.5rem;">
+            <h3 style="margin-bottom: 1rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
+              <span>Chi tiết Thành viên: <span id="detail-username" style="color: var(--primary);"></span></span>
+              <button class="btn btn-secondary" onclick="document.getElementById('user-details-panel').style.display='none'" style="padding: 4px 8px; font-size: 0.75rem;">Đóng</button>
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+              <div>
+                <h4 style="margin-bottom: 10px; color: var(--text-muted); font-size: 0.9rem;">Thông tin chung</h4>
+                <p style="font-size: 0.85rem; margin-bottom: 5px;"><strong>Ngày tạo:</strong> <span id="detail-created"></span></p>
+                <p style="font-size: 0.85rem; margin-bottom: 5px;"><strong>Số dư hiện tại:</strong> <span id="detail-balance" style="color: var(--success); font-weight: bold;"></span></p>
+                <p style="font-size: 0.85rem; margin-bottom: 5px;"><strong>Tổng nạp:</strong> <span id="detail-deposited"></span></p>
+                <p style="font-size: 0.85rem; margin-bottom: 5px;"><strong>Tổng tiêu:</strong> <span id="detail-spent"></span></p>
+                <p style="font-size: 0.85rem; margin-bottom: 5px;"><strong>Trạng thái:</strong> <span id="detail-status"></span></p>
+              </div>
+              
+              <div>
+                <h4 style="margin-bottom: 10px; color: var(--text-muted); font-size: 0.9rem;">Thao tác nhanh</h4>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                  <div style="display: flex; gap: 10px;">
+                    <input type="number" id="adjust-balance-amount" class="form-input" placeholder="Số tiền (+/-)" style="width: 120px;">
+                    <button class="btn btn-primary" id="btn-adjust-balance" style="font-size: 0.8rem;">Cộng/Trừ tiền</button>
+                  </div>
+                  <div style="display: flex; gap: 10px;">
+                    <input type="password" id="new-password-input" class="form-input" placeholder="Mật khẩu mới" style="width: 120px;">
+                    <button class="btn btn-secondary" id="btn-change-password" style="font-size: 0.8rem;">Đổi mật khẩu</button>
+                  </div>
+                  <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button class="btn btn-secondary" id="btn-toggle-lock" style="font-size: 0.8rem; flex: 1;">Khóa/Mở khóa</button>
+                    <button class="btn btn-secondary" id="btn-delete-user" style="font-size: 0.8rem; flex: 1; color: var(--danger); border-color: rgba(239, 68, 68, 0.3);">Xóa tài khoản</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h4 style="margin-bottom: 10px; color: var(--text-muted); font-size: 0.9rem;">Lịch sử giao dịch (50 giao dịch gần nhất)</h4>
+            <div class="data-table-container" style="max-height: 300px; overflow-y: auto;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Thời gian</th>
+                    <th>Loại</th>
+                    <th>Số tiền</th>
+                    <th>Ghi chú</th>
+                  </tr>
+                </thead>
+                <tbody id="user-transactions-tbody">
+                  <!-- Transactions will be loaded here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ======================================= -->
+        <!-- TAB 2: PRICING CONFIG VIEW (PROFIT MARKUP) -->
+        <!-- ======================================= -->
+        <div id="tab-price-config" class="tab-view">
+          <div class="panel-grid" style="grid-template-columns: 1.2fr 1fr;">
+
+            <div class="glass-card">
+              <h3 style="margin-bottom: 1rem; font-weight: 600;">Cấu hình Giá Bán & Kiếm Lợi Nhuận</h3>
+              <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; line-height: 1.5;">
+                Bạn có thể cài đặt giá bán hiển thị trên giao diện của khách hàng tại đây. Khi khách hàng quét mã
+                VietQR, họ sẽ trả mức giá này. Sau khi thanh toán thành công, hệ thống chỉ khấu trừ **Giá gốc nhà cung
+                cấp (Muacert)** trong ví đại lý của bạn để tạo cert, mang lại lợi nhuận trực tiếp cho bạn!
+              </p>
+
+              <form id="price-markup-form">
+                <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 1.5rem;">
+
+                  <!-- Pack 3 Config -->
+                  <div
+                    style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; display: flex; flex-direction: column; gap: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <span style="font-weight: 600; color: white; font-size: 1rem;">📦 GÓI CƠ BẢN (PACK 3)</span>
+                      <span style="font-size: 0.8rem; color: var(--text-muted);">Giá gốc Muacert: <b>50k</b></span>
+                    </div>
+
+                    <div class="form-row-responsive">
+                      <div class="form-group" style="margin-bottom: 0;">
+                        <label
+                          style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Tên
+                          gói hiển thị</label>
+                        <input type="text" id="name-pack3" class="form-input" placeholder="Gói Cơ Bản (Basic)" required>
+                      </div>
+                      <div class="form-group" style="margin-bottom: 0;">
+                        <label
+                          style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Thời
+                          hạn bảo hành</label>
+                        <input type="text" id="warranty-pack3" class="form-input" placeholder="Bảo hành 1 tháng"
+                          required>
+                      </div>
+                    </div>
+
+                    <div class="form-row-responsive align-end">
+                      <div class="form-group" style="margin-bottom: 0;">
+                        <label
+                          style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Tính
+                          năng / Quyền lợi (Mỗi dòng 1 tính năng)</label>
+                        <textarea id="features-pack3" class="form-input" rows="3"
+                          placeholder="Chứng chỉ dùng chung&#10;Kích hoạt trong 72h&#10;Thích hợp test ứng dụng"
+                          style="font-family: inherit; font-size: 0.85rem; height: auto;" required></textarea>
+                      </div>
+                      <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                          <label
+                            style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Giá
+                            bán đại lý (VND)</label>
+                          <input type="number" id="price-pack3" class="form-input" placeholder="70000"
+                            style="text-align: right;" required>
+                        </div>
+                        <div style="font-size: 0.85rem; color: var(--success); font-weight: 600; text-align: right;">
+                          Lãi chênh lệch: +<span id="profit-pack3">20,000</span> đ
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Pack 2 Config -->
+                  <div
+                    style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; display: flex; flex-direction: column; gap: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <span style="font-weight: 600; color: white; font-size: 1rem;">📦 GÓI TIÊU CHUẨN (PACK 2)</span>
+                      <span style="font-size: 0.8rem; color: var(--text-muted);">Giá gốc Muacert: <b>100k</b></span>
+                    </div>
+
+                    <div class="form-row-responsive">
+                      <div class="form-group" style="margin-bottom: 0;">
+                        <label
+                          style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Tên
+                          gói hiển thị</label>
+                        <input type="text" id="name-pack2" class="form-input" placeholder="Gói Tiêu Chuẩn" required>
+                      </div>
+                      <div class="form-group" style="margin-bottom: 0;">
+                        <label
+                          style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Thời
+                          hạn bảo hành</label>
+                        <input type="text" id="warranty-pack2" class="form-input" placeholder="Bảo hành 6 tháng"
+                          required>
+                      </div>
+                    </div>
+
+                    <div class="form-row-responsive align-end">
+                      <div class="form-group" style="margin-bottom: 0;">
+                        <label
+                          style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Tính
+                          năng / Quyền lợi (Mỗi dòng 1 tính năng)</label>
+                        <textarea id="features-pack2" class="form-input" rows="3"
+                          placeholder="Chứng chỉ Reseller riêng&#10;Kích hoạt trong 24h-48h&#10;Duyệt nhanh Bypass unban"
+                          style="font-family: inherit; font-size: 0.85rem; height: auto;" required></textarea>
+                      </div>
+                      <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                          <label
+                            style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Giá
+                            bán đại lý (VND)</label>
+                          <input type="number" id="price-pack2" class="form-input" placeholder="120000"
+                            style="text-align: right;" required>
+                        </div>
+                        <div style="font-size: 0.85rem; color: var(--success); font-weight: 600; text-align: right;">
+                          Lãi chênh lệch: +<span id="profit-pack2">20,000</span> đ
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Pack 1 Config -->
+                  <div
+                    style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; display: flex; flex-direction: column; gap: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <span style="font-weight: 600; color: white; font-size: 1rem;">📦 GÓI CAO CẤP VIP (PACK 1)</span>
+                      <span style="font-size: 0.8rem; color: var(--text-muted);">Giá gốc Muacert: <b>150k</b></span>
+                    </div>
+
+                    <div class="form-row-responsive">
+                      <div class="form-group" style="margin-bottom: 0;">
+                        <label
+                          style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Tên
+                          gói hiển thị</label>
+                        <input type="text" id="name-pack1" class="form-input" placeholder="Gói Cao Cấp VIP" required>
+                      </div>
+                      <div class="form-group" style="margin-bottom: 0;">
+                        <label
+                          style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Thời
+                          hạn bảo hành</label>
+                        <input type="text" id="warranty-pack1" class="form-input" placeholder="Bảo hành trọn đời"
+                          required>
+                      </div>
+                    </div>
+
+                    <div class="form-row-responsive align-end">
+                      <div class="form-group" style="margin-bottom: 0;">
+                        <label
+                          style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Tính
+                          năng / Quyền lợi (Mỗi dòng 1 tính năng)</label>
+                        <textarea id="features-pack1" class="form-input" rows="3"
+                          placeholder="Chứng chỉ VIP Độc quyền&#10;Duyệt siêu tốc dưới 24h&#10;Hỗ trợ bypass thu hồi vĩnh viễn"
+                          style="font-family: inherit; font-size: 0.85rem; height: auto;" required></textarea>
+                      </div>
+                      <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                          <label
+                            style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Giá
+                            bán đại lý (VND)</label>
+                          <input type="number" id="price-pack1" class="form-input" placeholder="180000"
+                            style="text-align: right;" required>
+                        </div>
+                        <div style="font-size: 0.85rem; color: var(--success); font-weight: 600; text-align: right;">
+                          Lãi chênh lệch: +<span id="profit-pack1">30,000</span> đ
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Lưu thay đổi cấu hình các gói
+                  bán</button>
+              </form>
+            </div>
+
+            <div class="glass-card">
+              <h3 style="margin-bottom: 1rem; font-weight: 600;">💡 Quy Trình Hoạt Động & Lợi Nhuận</h3>
+              <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1rem;">
+                Mô hình chênh lệch giá giúp bạn thu hồi vốn và phát triển kinh doanh Cert cho iOS cực kỳ hiệu quả mà
+                không cần ôm hạ tầng hay máy chủ Apple Developer.
+              </p>
+
+              <div
+                style="background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; font-size: 0.85rem;">
+                <h4
+                  style="margin-bottom: 10px; font-weight: 600; color: white; display: flex; align-items: center; gap: 6px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  Ví dụ quy trình thực tế:
+                </h4>
+                <ol
+                  style="padding-left: 15px; display: flex; flex-direction: column; gap: 8px; color: var(--text-muted);">
+                  <li>Bạn cấu hình giá bán **Gói Cơ Bản là 80,000đ** (lãi 30,000đ so với giá gốc đại lý).</li>
+                  <li>Khách vào trang chủ của bạn đăng ký, quét mã VietQR và chuyển khoản **80,000đ** trực tiếp vào số
+                    tài khoản ngân hàng của bạn.</li>
+                  <li>Cổng **Pay2S.vn** nhận được giao dịch, tự động bắn Webhook thông báo về hệ thống.</li>
+                  <li>Hệ thống nhận được webhook 80k, tự động kết nối API Muacert và kích hoạt gói **Basic (khấu trừ
+                    đúng 50k số dư gốc của bạn trên Muacert)**.</li>
+                  <li>Giao dịch hoàn tất! Khách nhận được Cert để cài đặt, ví Muacert của bạn bị khấu trừ 50k, và tài
+                    khoản ngân hàng của bạn thực tế đã thu về **80,000đ** (mang lại 30k lợi nhuận chênh lệch ngay lập
+                    tức).</li>
+                </ol>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+        <!-- ======================================= -->
+        <!-- TAB 3: SYSTEM CONFIG VIEW (API KEY & CREDENTIALS) -->
+        <!-- ======================================= -->
+        <div id="tab-system-config" class="tab-view">
+          <div class="panel-grid" style="grid-template-columns: 1fr 1fr;">
+
+            <!-- Left card: API Keys & Mode -->
+            <div class="glass-card">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="margin: 0; font-weight: 600;">🔐 Khóa Kết nối & Tài khoản Admin</h3>
+              </div>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem; line-height: 1.5;">
+                Thiết lập các khóa API bảo mật lấy từ Muacert.com và Pay2S.vn, cùng tài khoản đăng nhập admin đại lý.
+              </p>
+
+              <form id="system-config-form">
+                <div style="display: flex; flex-direction: column; gap: 14px;">
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label
+                      style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px; display: block;">Token
+                      Muacert (sk_...)</label>
+                    <input type="text" id="muacert-token" class="form-input"
+                      placeholder="sk_live_xxxxxxxxxxxxxxxxxx"
+                      style="font-family: var(--font-mono); font-size: 0.85rem;">
+                  </div>
+
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label
+                      style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px; display: block;">Pay2S
+                      Partner Code</label>
+                    <input type="text" id="pay2s-partner-code" class="form-input" placeholder="Nhập mã Pay2S Partner Code"
+                      style="font-family: var(--font-mono); font-size: 0.85rem;">
+                  </div>
+
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label
+                      style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px; display: block;">Pay2S
+                      Access Key</label>
+                    <input type="text" id="pay2s-access-key" class="form-input" placeholder="Nhập mã Pay2S Access Key"
+                      style="font-family: var(--font-mono); font-size: 0.85rem;">
+                  </div>
+
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label
+                      style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px; display: block;">Pay2S
+                      Secret Key</label>
+                    <input type="text" id="pay2s-key" class="form-input" placeholder="Nhập mã Pay2S Secret Key"
+                      style="font-family: var(--font-mono); font-size: 0.85rem;">
+                  </div>
+
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px; display: block;">Số
+                      tài khoản ngân hàng nhận tiền</label>
+                    <input type="text" id="pay2s-bank-account" class="form-input" placeholder="1234567890">
+                  </div>
+
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                      <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px; display: block;">Mã
+                        ngân hàng (BIN)</label>
+                      <select id="pay2s-bank-code" class="form-input">
+                        <option value="MB">MBBank (Quân Đội)</option>
+                        <option value="VCB">Vietcombank</option>
+                        <option value="TCB">Techcombank</option>
+                        <option value="VPB">VPBank</option>
+                        <option value="ACB">ACB</option>
+                        <option value="VIB">VIB</option>
+                        <option value="TPB">TPBank</option>
+                        <option value="STB">Sacombank</option>
+                        <option value="CTG">VietinBank</option>
+                        <option value="BIDV">BIDV</option>
+                        <option value="HDB">HDBank</option>
+                        <option value="VAB">VietABank</option>
+                        <option value="MSB">MSB (Hàng Hải)</option>
+                        <option value="OCB">OCB (Phương Đông)</option>
+                      </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                      <label
+                        style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px; display: block;">Tên chủ
+                        tài khoản</label>
+                      <input type="text" id="pay2s-account-name" class="form-input" placeholder="NGUYEN VAN A">
+                    </div>
+                  </div>
+
+                  <hr style="border: none; border-top: 1px solid var(--border-color); margin: 6px 0;">
+
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                      <label
+                        style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px; display: block;">Tên
+                        đăng nhập Admin</label>
+                      <input type="text" id="admin-username" class="form-input" placeholder="admin">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                      <label
+                        style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px; display: block;">Mật
+                        khẩu Admin mới</label>
+                      <input type="password" id="admin-password" class="form-input"
+                        placeholder="Để trống nếu không đổi">
+                    </div>
+                  </div>
+
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px; display: block;">Link Liên hệ hỗ trợ (Telegram, Zalo, Messenger...)</label>
+                    <input type="text" id="support-url" class="form-input" placeholder="https://t.me/your_telegram">
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.25rem;">💾 Lưu toàn bộ
+                  cấu hình bảo mật</button>
+              </form>
+            </div>
+
+            <!-- Right card: Sandbox Explanation -->
+            <div class="glass-card">
+              <div
+                style="margin-top: 1.5rem; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; font-size: 0.85rem;">
+                <h4
+                  style="margin-bottom: 10px; font-weight: 600; color: white; display: flex; align-items: center; gap: 6px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                  </svg>
+                  Lưu ý quan trọng
+                </h4>
+                <ul
+                  style="padding-left: 18px; display: flex; flex-direction: column; gap: 6px; color: var(--text-muted);">
+                  <li>Mỗi lần đổi Token hoặc Key, hãy bấm <b>"Lưu toàn bộ cấu hình bảo mật"</b> để ghi vào server.</li>
+                  <li>URL IPN tự động cập nhật theo domain hiện tại của bạn.</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Tab: Sao lưu & Khôi phục -->
+        <div id="tab-backup-config" class="tab-view">
+          <div class="panel-grid" style="grid-template-columns: 1fr 1fr;">
+            
+            <!-- Left card: Export Backup -->
+            <div class="glass-card">
+              <h3 style="margin-bottom: 1rem; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                📥 Xuất dữ liệu (Backup)
+              </h3>
+              <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1.5rem;">
+                Tải xuống toàn bộ cấu hình hệ thống, danh sách gói cước, cài đặt API và tất cả tài khoản người dùng (bao gồm cả lịch sử mua cert, UDID, trạng thái kích hoạt) dưới dạng file JSON.
+              </p>
+              <button id="export-backup-btn" class="btn btn-primary" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Tải file Sao lưu (.json)
+              </button>
+            </div>
+
+            <!-- Right card: Import Backup -->
+            <div class="glass-card">
+              <h3 style="margin-bottom: 1rem; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                📤 Nhập dữ liệu (Restore)
+              </h3>
+              <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1.5rem;">
+                Khôi phục hoặc chuyển dữ liệu từ website cũ sang website mới. Chọn file backup JSON đã tải xuống trước đó. 
+                <strong style="color: var(--danger);">Lưu ý: Thao tác này sẽ ghi đè toàn bộ dữ liệu hiện tại!</strong>
+              </p>
+              
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <input type="file" id="import-backup-file" accept=".json" style="display: none;">
+                <button id="select-backup-btn" class="btn btn-secondary" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px;">
+                  📁 Chọn file backup JSON
+                </button>
+                <div id="selected-file-info" style="font-size: 0.8rem; color: var(--text-muted); text-align: center; display: none;">
+                  Đã chọn: <span id="selected-file-name" style="font-weight: 600; color: white;"></span>
+                </div>
+                <button id="import-backup-btn" class="btn btn-primary" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px; background: var(--danger); border-color: var(--danger);" disabled>
+                  ⚡ Bắt đầu khôi phục dữ liệu
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ======================================= -->
+        <!-- TAB: LOGS VIEW (NHẬT KÝ HỆ THỐNG) -->
+        <!-- ======================================= -->
+        <div id="tab-logs-config" class="tab-view">
+          <div class="glass-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+              <div>
+                <h3 style="font-weight: 600; margin-bottom: 5px;">Nhật ký hoạt động (Logs)</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Theo dõi các thao tác nạp tiền, mua cert, lỗi hệ thống.</p>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <button id="refresh-logs-btn" class="btn btn-secondary" style="display: flex; align-items: center; gap: 6px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="23 4 23 10 17 10"></polyline>
+                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                  </svg>
+                  Làm mới
+                </button>
+                <button id="clear-logs-btn" class="btn btn-primary" style="background: var(--danger); border-color: var(--danger); display: flex; align-items: center; gap: 6px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                  Xóa toàn bộ Logs
+                </button>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th style="width: 150px;">Thời gian</th>
+                    <th style="width: 100px;">Nguồn</th>
+                    <th style="width: 100px;">Loại</th>
+                    <th>Nội dung</th>
+                  </tr>
+                </thead>
+                <tbody id="logs-list-tbody">
+                  <tr>
+                    <td colspan="4" style="text-align: center; padding: 2rem; color: var(--text-muted);">Đang tải dữ liệu...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="pagination" style="margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+              <span id="logs-page-info" style="color: var(--text-muted); font-size: 0.85rem;">Trang 1 / 1</span>
+              <div style="display: flex; gap: 10px;">
+                <button id="btn-logs-prev" class="btn btn-secondary" disabled>Trước</button>
+                <button id="btn-logs-next" class="btn btn-secondary" disabled>Sau</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+
+    </main>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="admin.js?v=2"></script>
+</body>
+
+</html>

@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark" class="user-page">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>travelbooking- Đặt tour du lịch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #4338ca;
+      --secondary: #06b6d4;
+      --success: #10b981;
+      --error: #ef4444;
+      --warning: #f59e0b;
+      --pink: #ec4899;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'SFMono-Regular', Consolas, monospace;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-elev: #ffffff;
+      --bg-soft: #f1f5f9;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+      --nav-bg: rgba(255, 255, 255, 0.92);
+    }
+
+    [data-theme="dark"] {
+      --bg: #0b0f19;
+      --bg-elev: #131826;
+      --bg-soft: #1b2236;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.08);
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+      --nav-bg: rgba(19, 24, 38, 0.92);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 80px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    /* ===== TOP BAR ===== */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--nav-bg);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topbar-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+
+    .logo-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 800;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg-elev);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      transition: 0.2s;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--primary);
+    }
+
+    .lang-chip {
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg-elev);
+      font-weight: 600;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      border-radius: 12px;
+      font-family: var(--font);
+      font-weight: 600;
+      font-size: 0.92rem;
+      padding: 12px 22px;
+      cursor: pointer;
+      transition: 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-soft {
+      background: var(--bg-soft);
+      color: var(--text);
+    }
+
+    .btn-soft:hover {
+      background: var(--border);
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 2rem;
+      align-items: center;
+      padding: 3rem 0 2rem;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    .hero h1 .grad {
+      background: linear-gradient(90deg, var(--primary), var(--pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      margin: 1.25rem 0 1.75rem;
+      max-width: 460px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .hero-visual {
+      background: linear-gradient(135deg, rgba(79, 70, 229, 0.12), rgba(236, 72, 153, 0.1));
+      border-radius: 28px;
+      padding: 2rem;
+      text-align: center;
+      min-height: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+    }
+
+    .phone-mock {
+      font-size: 5rem;
+      filter: drop-shadow(0 10px 30px rgba(79, 70, 229, 0.3));
+    }
+
+    /* ===== SECTIONS ===== */
+    section {
+      padding: 1.5rem 0;
+    }
+
+    .section-head {
+      text-align: center;
+      margin-bottom: 1.75rem;
+    }
+
+    .section-head h2 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .section-head p {
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .feature {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .feature .emoji {
+      font-size: 1.7rem;
+    }
+
+    .feature h4 {
+      margin: 10px 0 6px;
+      font-weight: 700;
+    }
+
+    .feature p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* ===== PRICING ===== */
+    .packages-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .package-card {
+      position: relative;
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.75rem 1.25rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .package-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+    }
+
+    .package-card.featured {
+      border-color: var(--primary);
+      border-width: 2px;
+    }
+
+    .package-card.selected {
+      border-color: var(--success) !important;
+      border-width: 2px !important;
+      background: rgba(16, 185, 129, 0.12) !important;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.4) !important;
+      transform: scale(1.02);
+    }
+
+    .pack-popular-badge,
+    .pack-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .pack-name {
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .pack-price-vnd {
+      font-size: 1.9rem;
+      font-weight: 800;
+      margin: 8px 0 2px;
+      display: block;
+    }
+
+    .pack-price-usd {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      display: block;
+    }
+
+    .pack-features {
+      list-style: none;
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: left;
+    }
+
+    .pack-features li {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      padding-left: 22px;
+      position: relative;
+    }
+
+    .pack-features li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--success);
+      font-weight: 800;
+    }
+
+    /* ===== CARDS / FORMS ===== */
+    .glass-card {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 13px 15px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--bg-soft);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 0.95rem;
+      transition: 0.2s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: var(--bg-elev);
+    }
+
+    .balance-display {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.08));
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 18px;
+      padding: 1.5rem;
+      text-align: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .balance-label {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .balance-amount {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--success);
+    }
+
+    .auth-toggle {
+      text-align: center;
+      margin-top: 1rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .auth-toggle a {
+      color: var(--primary);
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .panel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 3px 0;
+    }
+
+    .detail-lbl {
+      color: var(--text-muted);
+    }
+
+    .detail-val {
+      font-weight: 600;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+
+    .history-item:last-child {
+      border: none;
+    }
+
+    .history-amount.positive {
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    .history-amount.negative {
+      color: var(--error);
+      font-weight: 700;
+    }
+
+    .device-item {
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+
+    .device-item .device-udid {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      word-break: break-all;
+    }
+
+    .pulse-spinner {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--warning);
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.3;
+      }
+    }
+
+    /* ===== TAB VIEWS ===== */
+    .tab-view {
+      display: none;
+      animation: fade 0.25s;
+    }
+
+    .tab-view.active {
+      display: block;
+    }
+
+    @keyframes fade {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* ===== BOTTOM NAV ===== */
+    .bottom-nav {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 60;
+      background: var(--nav-bg);
+      backdrop-filter: blur(14px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 4px calc(8px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .nav-item {
+      flex: 1;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      padding: 6px 0;
+      font-family: var(--font);
+      font-size: 0.68rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: 0.2s;
+    }
+
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    /* ===== FLOATING SUPPORT ===== */
+    .fab-support {
+      position: fixed;
+      right: 18px;
+      bottom: 90px;
+      z-index: 55;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      padding: 12px 18px;
+      font-family: var(--font);
+      font-weight: 600;
+      font-size: 0.85rem;
+      box-shadow: 0 8px 24px rgba(79, 70, 229, 0.4);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    @media (max-width: 860px) {
+      html {
+        font-size: 14px; /* Giảm toàn bộ kích thước UI trên mobile */
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 2rem 0 1rem;
+      }
+
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+
+      .hero-visual {
+        min-height: 200px;
+        order: -1;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .packages-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .panel-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="logo">
+        <div style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; color: white; margin-right: 8px;">
+          <svg viewBox="0 0 384 512" width="24" height="24" fill="currentColor">
+            <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+          </svg>
+        </div>
+        <span>TravelBooking</span>
+      </div>
+      <div class="topbar-actions">
+        <span id="header-balance" style="display:none; color:var(--success); font-weight:700; font-size:0.8rem; white-space:nowrap;"></span>
+        <button class="btn btn-secondary" id="header-logout-btn" onclick="logout()" style="display:none; padding:6px 12px; font-size:0.8rem; margin-left:6px; white-space:nowrap;">Đăng xuất</button>
+        <button class="btn btn-primary" id="header-login-btn" onclick="switchTab('auth')"
+          style="padding:9px 16px; font-size:0.85rem;">Đăng nhập</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <!-- Hidden header text for app.js compatibility -->
+    <h1 id="view-title" style="display:none;">Cửa Hàng Cert iOS</h1>
+    <p id="view-desc" style="display:none;">Đăng ký chứng chỉ Apple Developer tự động</p>
+
+    <!-- Sidebar user info (app.js compatibility, hidden) -->
+    <div id="sidebar-user-info" style="display:none;">
+      <span id="sidebar-avatar" style="margin-right:8px;"></span><span id="sidebar-username" style="margin-right:8px;"></span><span id="sidebar-balance"></span>
+    </div>
+    <div id="sidebar-auth-links" style="display:none;"></div>
+    <div id="sidebar-logout" style="display:none;"></div>
+
+    <!-- ===== TAB: WELCOME ===== -->
+    <div id="tab-welcome" class="tab-view active">
+      <div class="hero">
+        <div class="hero-text">
+          <h1>Khám phá những <svg viewBox="0 0 384 512" width="1em" height="1em" fill="currentColor" style="vertical-align: -0.125em; color: white;"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg> <span class="grad">chuyến du lịch tuyệt vời</span></h1>
+          <p>Đặt tour nhanh chóng,xem lịch trình chi tiết
+            Thanh toán tiện lợi và nhận email xác nh ngay lập tức
+            Hàng trăm điểm hấp dẫn đang chờ bạn khám phá
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn-primary"
+              onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Xem các giá bán</button>
+            <button class="btn btn-soft" onclick="handleGetStarted()">Bắt đầu</button>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="phone-mock">🏝️</div>
+        </div>
+      </div>
+
+      <section>
+        <div class="section-head">
+          <h2>Vì sao chọn chúng tôi?</h2>
+          <p>Hệ thống tự động hoàn toàn, an toàn và nhanh chóng</p>
+        </div>
+        <div class="features">
+          <div class="feature">
+            <div class="emoji">⚡</div>
+            <h4>Tự động 100%</h4>
+            <p>Quét mã VietQR chuyển khoản nạp tiền, hệ thống nhận diện và đăng ký cert lập tức.</p>
+          </div>
+          <div class="feature">
+            <div class="emoji">📦</div>
+            <h4>Trích Xuất Chứng Chỉ</h4>
+            <p>Tải trực tiếp tệp Cert dạng ZIP (file p12 + provisioning) để import vào Scarlet/ESign.</p>
+          </div>
+          <div class="feature">
+            <div class="emoji">🛡️</div>
+            <h4>Bảo hành Uy tín</h4>
+            <p>Hỗ trợ đầy đủ các gói bảo hành từ 40 đến 300 ngày cho các gói có bảo hành.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="featured-tours">
+        <div class="section-head">
+          <h2>Các Tour Du Lịch Nổi Bật</h2>
+          <p>Lựa chọn điểm đén yêu thích của bạn</p>
+        </div>
+        <div class="packages-grid" id="welcome-packages-grid">
+          <div class="package-card" data-pack-id="3" onclick="window.location.href='tours.html'"
+            <span class="pack-name" id="welcome-name-pack3">Đà lạt 3 Ngày 2 đêm</span>
+            <span class="pack-price-vnd" id="display-price-pack3">2,500,000đ</span>
+            <span class="pack-price-usd" id="welcome-warranty-pack3">Khởi hành hàng tuần</span>
+            <ul class="pack-features" id="welcome-features-pack3">
+              <li>Khách sạn 3 sao</li>
+              <li>Xe đưa đón</li>
+              <li>Ăn sáng miễn phí</li>
+            </ul>
+          </div>
+          <div class="package-card featured" data-pack-id="2" onclick="window.location.href='tours.html'"
+            <div class="pack-popular-badge">KHUYÊN DÙNG</div>
+            <span class="pack-name" id="welcome-name-pack2">Phú Quốc 4 Ngày 3 đêm</span>
+            <span class="pack-price-vnd" id="display-price-pack2">4,990,000đ</span>
+            <span class="pack-price-usd" id="welcome-warranty-pack2">Toue bán chạy</span>
+            <ul class="pack-features" id="welcome-features-pack2">
+              <li>Resort 4 sao</li>
+              <li>Vé tham quan</li>
+              <li>Buffet hải sản</li>
+            </ul>
+          </div>
+          <div class="package-card" data-pack-id="1" onclick="window.location.href='tours.html'"
+            <span class="pack-name" id="welcome-name-pack1">Đà nẵng-Hội An 3 ngày 2 đêm</span>
+            <span class="pack-price-vnd" id="display-price-pack1">3,500,000đ</span>
+            <span class="pack-price-usd" id="welcome-warranty-pack1">Khởi hành mỗi ngày</span>
+            <ul class="pack-features" id="welcome-features-pack1">
+              <li>Khách sạn trung tâm</li>
+              <li>Tham quan Bà Nà Hill</li>
+              <li>Xe du lịch đời mới</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ===== TAB: AUTH ===== -->
+    <div id="tab-auth" class="tab-view">
+      <div class="glass-card" style="max-width:440px; margin:2.5rem auto;">
+        <h3 id="auth-title" style="text-align:center; margin-bottom:0.4rem; font-size:1.4rem; font-weight:800;">Đăng
+          nhập để tiếp tục</h3>
+        <form id="auth-form" style="margin-top:1.25rem;">
+          <div class="form-group">
+            <label>Tên đăng nhập</label>
+            <input type="text" id="auth-username" class="form-input" placeholder="Nhập tên đăng nhập..." required>
+          </div>
+          <div class="form-group">
+            <label>Mật khẩu</label>
+            <input type="password" id="auth-password" class="form-input" placeholder="Nhập mật khẩu..." required>
+          </div>
+          <div class="form-group" id="auth-confirm-password-group" style="display:none;">
+            <label>Nhập lại mật khẩu</label>
+            <input type="password" id="auth-confirm-password" class="form-input" placeholder="Nhập lại mật khẩu...">
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" id="auth-submit-btn" style="height:48px;">Đăng
+            nhập</button>
+        </form>
+        <div style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted);">
+          Quên mật khẩu? <a href="javascript:void(0)" onclick="openSupportUrl()" style="color: var(--primary); text-decoration: none;">click vào Liên hệ hỗ trợ để cấp lại</a>
+        </div>
+        <div class="auth-toggle">
+          <span id="auth-toggle-text">Chưa có tài khoản?</span>
+          <a id="auth-toggle-link" onclick="toggleAuthMode()">Đăng ký ngay</a>
+        </div>
+        <div id="auth-message" style="text-align:center; margin-top:1rem; font-size:0.9rem;"></div>
+      </div>
+    </div>
+
+    <!-- ===== TAB: DEPOSIT ===== -->
+    <div id="tab-deposit" style="display:none" class="tab-view">
+      <div class="balance-display">
+        <div class="balance-label">Số dư hiện tại</div>
+        <div class="balance-amount" id="deposit-balance">0đ</div>
+      </div>
+      <div class="panel-grid">
+        <div class="glass-card">
+          <h3 style="margin-bottom:0.85rem; font-weight:700;">Nạp tiền vào ví</h3>
+          <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1rem;">Nhập số tiền muốn nạp. Hệ thống tạo
+            mã QR chuyển khoản. Số dư được cộng tự động sau vài giây.</p>
+          <form id="deposit-form">
+            <div class="form-group">
+              <label>Số tiền nạp (VNĐ)</label>
+              <input type="number" id="deposit-amount" class="form-input" placeholder="Ví dụ: 200000" min="10000"
+                step="1000" required>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:1rem;">
+              <button type="button" class="btn btn-soft"
+                onclick="document.getElementById('deposit-amount').value='50000'"
+                style="font-size:0.8rem; padding:8px 14px;">50K</button>
+              <button type="button" class="btn btn-soft"
+                onclick="document.getElementById('deposit-amount').value='100000'"
+                style="font-size:0.8rem; padding:8px 14px;">100K</button>
+              <button type="button" class="btn btn-soft"
+                onclick="document.getElementById('deposit-amount').value='200000'"
+                style="font-size:0.8rem; padding:8px 14px;">200K</button>
+              <button type="button" class="btn btn-soft"
+                onclick="document.getElementById('deposit-amount').value='500000'"
+                style="font-size:0.8rem; padding:8px 14px;">500K</button>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" style="height:46px;">Tạo mã nạp tiền</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TAB: PURCHASE ===== -->
+    <div id="tab-purchase" style="display:none" class="tab-view">
+      <div class="balance-display">
+        <div class="balance-label">Số dư ví</div>
+        <div class="balance-amount" id="purchase-balance">0đ</div>
+      </div>
+      <div class="glass-card" style="margin-bottom: 1rem; padding: 1.25rem;">
+        <h3 style="margin-bottom:1rem; font-weight:700; font-size: 1.1rem;">Chọn gói chứng chỉ</h3>
+        <div class="packages-grid" id="purchase-packages-grid">
+          <div class="package-card selected" data-pack-id="3">
+            <span class="pack-name" id="form-name-pack3">Gói Cơ Bản (Basic)</span>
+            <span class="pack-price-vnd" id="form-price-pack3">70,000đ</span>
+            <span class="pack-price-usd" id="form-warranty-pack3">Bảo hành 1 tháng</span>
+          </div>
+          <div class="package-card featured" data-pack-id="2">
+            <div class="pack-popular-badge">KHUYÊN DÙNG</div>
+            <span class="pack-name" id="form-name-pack2">Gói Tiêu Chuẩn</span>
+            <span class="pack-price-vnd" id="form-price-pack2">120,000đ</span>
+            <span class="pack-price-usd" id="form-warranty-pack2">Bảo hành 6 tháng</span>
+          </div>
+          <div class="package-card" data-pack-id="1">
+            <span class="pack-name" id="form-name-pack1">Gói Cao Cấp (Super)</span>
+            <span class="pack-price-vnd" id="form-price-pack1">180,000đ</span>
+            <span class="pack-price-usd" id="form-warranty-pack1">Bảo hành trọn đời</span>
+          </div>
+        </div>
+
+        <!-- Selected Package Details Box -->
+        <div id="selected-package-details" style="margin-top: 1rem; padding: 1rem; background: rgba(79, 70, 229, 0.05); border: 1px dashed rgba(79, 70, 229, 0.3); border-radius: 12px;">
+          <h4 style="margin-bottom: 0.5rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 6px;">
+            ✨ Chi tiết gói đang chọn: <span id="selected-pack-title" style="color: white;">-</span>
+          </h4>
+          <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+            🛡️ Thời hạn bảo hành: <span id="selected-pack-warranty" style="color: var(--warning); font-weight: 600;">-</span>
+          </div>
+          <ul id="selected-pack-features-list" style="padding-left: 1.2rem; font-size: 0.85rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 4px;">
+          </ul>
+        </div>
+      </div>
+      <div class="glass-card" style="margin-bottom: 1rem; padding: 1.25rem;">
+        <h3 style="margin-bottom:0.75rem; font-weight:700; font-size: 1.1rem;">Nhập thông tin thiết bị</h3>
+        <form id="purchase-form">
+          <div class="form-group">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <label for="purchase-udid">UDID Thiết bị</label>
+              <a href="/udid" target="_blank"
+                style="color:var(--secondary); font-size:0.82rem; font-weight:600; text-decoration:none;">🔑 Lấy UDID tự
+                động</a>
+            </div>
+            <input type="text" id="purchase-udid" class="form-input" placeholder="Nhập UDID thiết bị iOS..." required>
+          </div>
+          <div class="form-group">
+            <label>Tên thiết bị (tùy chọn)</label>
+            <input type="text" id="purchase-name" class="form-input" placeholder="VD: iPhone của Khánh">
+          </div>
+          <div id="purchase-summary"
+            style="background:rgba(79,70,229,0.08); border:1px solid rgba(79,70,229,0.25); border-radius:12px; padding:14px; margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center;">
+            <span style="color:var(--text-muted);">Tổng thanh toán:</span>
+            <span id="purchase-total" style="font-size:1.25rem; font-weight:800; color:var(--primary);">70,000đ</span>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" style="height:52px; font-size:1rem;">💳 Mua Cert — Trừ
+            từ ví</button>
+        </form>
+        <div id="purchase-message" style="text-align:center; margin-top:1rem; font-size:0.9rem;"></div>
+      </div>
+    </div>
+
+    <!-- ===== TAB: MY DEVICES ===== -->
+    <div id="tab-my-devices" style="display:none;" class="tab-view">
+      <div class="glass-card">
+        <h3 style="margin-bottom:0.5rem; font-weight:700;">Thiết bị đã đăng ký</h3>
+        <p style="color: var(--warning); font-size: 0.85rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 6px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          Lưu ý: Mật khẩu giải nén chứng chỉ (file p12) mặc định là 1
+        </p>
+        
+        <!-- Search UDID -->
+        <div style="margin-bottom: 1.25rem;">
+          <input type="text" id="search-udid-input" placeholder="🔍 Nhập UDID để tìm kiếm..." 
+            style="width:100%; padding:12px 16px; border-radius:12px; border:1px solid var(--border); background:rgba(255,255,255,0.05); color:white; font-size:0.9rem; outline:none; transition:0.2s;">
+        </div>
+
+        <div id="devices-list">
+          <p style="color:var(--text-muted); text-align:center; padding:2rem 0;">Chưa có thiết bị nào. Hãy mua cert để
+            bắt đầu!</p>
+        </div>
+      </div>
+
+      <div class="glass-card" style="margin-top: 1.5rem;">
+        <h3 style="margin-bottom:1rem; font-weight:700; color: var(--warning);">Đã xóa gần đây</h3>
+        <div id="deleted-devices-list">
+          <p style="color:var(--text-muted); text-align:center; padding:1rem 0;">Không có thiết bị nào đã xóa.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TAB: HISTORY ===== -->
+    <div id="tab-history" style="display: none;" class="tab-view">
+      <div class="glass-card">
+        <h3 style="margin-bottom:1rem; font-weight:700;">Lịch sử giao dịch</h3>
+        <div id="history-list">
+          <p style="color:var(--text-muted); text-align:center; padding:2rem 0;">Chưa có giao dịch nào.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TAB: SIGN APP ===== -->
+    <div id="tab-sign-app"style="display: none;" class="tab-view" style="padding: 0; margin: 0;"></div>
+
+    <!-- FOOTER -->
+    <footer style="margin-top: 3rem; padding: 2rem 0; border-top: 1px solid var(--border); text-align: center; font-size: 0.8rem; color: var(--text-muted); line-height: 1.6;">
+      <p style="margin-bottom: 1rem;">
+        Website này là một dịch vụ độc lập và không liên quan đến, được hỗ trợ bởi hoặc được tài trợ bởi Apple Inc. Bất kỳ tham chiếu nào đến Apple, iOS, macOS, Xcode hoặc các công nghệ liên quan chỉ để mô tả. Apple, logo Apple và tất cả các thương hiệu liên quan là tài sản của Apple Inc.
+      </p>
+      <p style="margin-bottom: 1rem;">
+        Bất kỳ sử dụng sai hợp pháp của công cụ này, bao gồm các thử nghiệm để tải xuống ứng dụng không được phép hoặc trái pháp luật, là trách nhiệm của người dùng.
+      </p>
+      <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+        <a id="footer-terms" href="/terms.html" target="_blank" style="color: var(--primary); text-decoration: none;">Điều khoản dịch vụ</a>
+        <a id="footer-privacy" href="/privacy.html" target="_blank" style="color: var(--primary); text-decoration: none;">Chính sách bảo mật</a>
+        <a id="footer-refund" href="/refund.html" target="_blank" style="color: var(--primary); text-decoration: none;">Chính sách hoàn tiền</a>
+      </div>
+    </footer>
+  </main>
+
+  <!-- FLOATING SUPPORT -->
+  <button class="fab-support" id="fab-support-btn" onclick="openSupportUrl()">📞 Tư vấn Tour</button>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-tab="welcome">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+      Trang chủ
+    </button>
+    <button class="nav-item" onclick="window.location.href='tours.html'" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+        <line x1="12" y1="18" x2="12.01" y2="18" />
+      </svg>
+      Tour Du Lịch
+    </button>
+    <button class="nav-item" onclick="window.location.href='booking.html'" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="9" cy="21" r="1" />
+        <circle cx="20" cy="21" r="1" />
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+      </svg>
+      Đặt Tour
+    </button>
+    <button class="nav-item" onclick="window.location.href='my-bookings.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 20h9"></path>
+        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+      </svg>
+      Đơn của tôi
+    </button>
+    <button class="nav-item" onclick="window.location.href='contact.html'" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="2" y="5" width="20" height="14" rx="2" />
+        <line x1="2" y1="10" x2="22" y2="10" />
+      </svg>
+      Liên Hệ
+    </button>
+    <button class="nav-item" onclick="window.location.href='login.html'" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10" />
+        <polyline points="12 6 12 12 16 14" />
+      </svg>
+      Tài Khoản
+    </button>
+  </nav>
+
+  <script src="app.js?v=6"></script>
+</body>
+
+</html>

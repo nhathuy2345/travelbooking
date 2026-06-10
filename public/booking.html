@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Đặt Tour</title>
+
+<style>
+body{
+  font-family:Arial,sans-serif;
+  background:#0f172a;
+  color:white;
+  padding:20px;
+}
+
+.container{
+  max-width:600px;
+  margin:auto;
+}
+
+input,textarea{
+  width:100%;
+  padding:12px;
+  margin-top:8px;
+  margin-bottom:16px;
+  border-radius:8px;
+  border:none;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:8px;
+  background:#2563eb;
+  color:white;
+  cursor:pointer;
+}
+
+#tour-name{
+  color:#22c55e;
+  margin-bottom:20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Đặt Tour</h1>
+
+<h3 id="tour-name"></h3>
+
+<form id="booking-form">
+
+<label>Họ và tên</label>
+<input type="text" id="fullName" required>
+
+<label>Email</label>
+<input type="email" id="email" required>
+
+<label>Số điện thoại</label>
+<input type="text" id="phone" required>
+
+<label>Số người</label>
+<input type="number" id="people" value="1" min="1">
+
+<label>Ngày khởi hành</label>
+<input type="date" id="departureDate">
+
+<label>Ghi chú</label>
+<textarea id="note"></textarea>
+
+<button type="submit">
+Xác nhận đặt tour
+</button>
+
+</form>
+
+<div id="result"></div>
+
+</div>
+
+<script src="booking.js"></script>
+
+</body>
+</html>

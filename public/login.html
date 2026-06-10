@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng nhập Bảng điều khiển Reseller</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+    .login-container {
+      width: 100%;
+      max-width: 420px;
+      animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .login-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .login-header {
+      text-align: center;
+    }
+    .login-logo {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      width: 54px;
+      height: 54px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.5rem;
+      margin: 0 auto 1rem auto;
+      box-shadow: 0 0 25px rgba(99, 102, 241, 0.5);
+      color: white;
+    }
+    .login-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: white;
+    }
+    .login-header p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    .error-msg {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="login-logo">M</div>
+        <h2>Bảng quản trị Reseller</h2>
+        <p>Vui lòng đăng nhập tài khoản đại lý quản trị</p>
+      </div>
+
+      <div id="error-box" class="error-msg">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        <span id="error-text">Sai thông tin đăng nhập!</span>
+      </div>
+
+      <form id="login-form" style="display: flex; flex-direction: column; gap: 1.25rem;">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label for="username">Tài khoản đại lý</label>
+          <input type="text" id="username" class="form-input" placeholder="Nhập tài khoản admin..." required autofocus>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0;">
+          <label for="password">Mật khẩu bảo mật</label>
+          <input type="password" id="password" class="form-input" placeholder="Nhập mật khẩu..." required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem; height: 45px;">
+          Đăng Nhập Hệ Thống
+        </button>
+      </form>
+
+      <div style="text-align: center;">
+        <a href="index.html" style="color: var(--text-muted); font-size: 0.8rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: var(--transition);">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          Quay lại Cửa hàng Khách hàng
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Đường dẫn gốc của Cloudflare Worker Backend của bạn
+    const API_BASE = ''; // Dùng relative URL vì đã có _redirects proxy
+
+    // Double check if already authenticated
+    const token = localStorage.getItem('reseller_admin_token');
+    if (token) {
+      fetch(API_BASE + '/api/admin/check', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+      .then(res => {
+        if (res.ok) {
+          window.location.href = 'admin.html';
+        }
+      });
+    }
+
+    const form = document.getElementById('login-form');
+    const errorBox = document.getElementById('error-box');
+    const errorText = document.getElementById('error-text');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+
+      errorBox.style.display = 'none';
+
+      try {
+        const res = await fetch(API_BASE + '/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        const result = await res.json();
+        
+        if (res.ok && result.success) {
+          // Store token in local storage
+          localStorage.setItem('reseller_admin_token', result.token);
+          // Redirect to dashboard
+          window.location.href = 'admin.html';
+        } else {
+          errorText.innerText = result.message || 'Tài khoản hoặc mật khẩu không chính xác';
+          errorBox.style.display = 'flex';
+        }
+      } catch (error) {
+        errorText.innerText = 'Lỗi mạng, không thể kết nối tới server Node.js';
+        errorBox.style.display = 'flex';
+      }
+    });
+  </script>
+</body>
+</html>
