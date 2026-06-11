@@ -39,14 +39,18 @@ document
 
   try {
 
-    const response =
-      await fetch("/api/bookings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(bookingData)
-      });
+   const token =
+  localStorage.getItem("reseller_admin_token");
+
+const response =
+  await fetch("/api/bookings", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify(bookingData)
+  });
 
     const data =
       await response.json();
