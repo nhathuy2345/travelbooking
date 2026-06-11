@@ -12,7 +12,7 @@ document.getElementById("tour-name").innerText =
 
 document
 .getElementById("booking-form")
-.addEventListener("submit", function(e){
+.addEventListener("submit", async function(e){
 
   e.preventDefault();
 
@@ -37,8 +37,52 @@ document
       document.getElementById("note").value
   };
 
-  console.log(bookingData);
+  try {
 
-  document.getElementById("result").innerHTML =
-    "<h3 style='color:lime'>Đặt tour thành công (demo)</h3>";
+    const response =
+      await fetch("/api/bookings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(bookingData)
+      });
+
+    const data =
+      await response.json();
+
+    if (data.success) {
+
+      document.getElementById("result").innerHTML =
+      `
+      <h3 style="color:lime">
+        Đặt tour thành công
+      </h3>
+      `;
+
+      document
+        .getElementById("booking-form")
+        .reset();
+
+    } else {
+
+      document.getElementById("result").innerHTML =
+      `
+      <h3 style="color:red">
+        ${data.message}
+      </h3>
+      `;
+    }
+
+  } catch (err) {
+
+    console.error(err);
+
+    document.getElementById("result").innerHTML =
+    `
+    <h3 style="color:red">
+      Không thể kết nối máy chủ
+    </h3>
+    `;
+  }
 });
